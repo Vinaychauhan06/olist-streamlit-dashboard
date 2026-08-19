@@ -151,6 +151,3 @@ You can deploy this application publicly in under 2 minutes:
 
 ---
 
-## 📜 License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
