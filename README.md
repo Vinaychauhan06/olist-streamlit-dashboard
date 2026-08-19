@@ -1,152 +1,399 @@
-# 📦 Olist Brazilian E-Commerce Analytics Suite
+# 📦 Olist Brazilian E-Commerce Analytics Dashboard
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-2.0%2B-150458.svg)](https://pandas.pydata.org/)
 [![Plotly](https://img.shields.io/badge/Plotly-5.20%2B-3F4F75.svg)](https://plotly.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B.svg)](https://streamlit.io/)
 
-> **Consulting-grade interactive analytics dashboard modeling 100K+ real-world orders and R$ 15.8M in GMV from Olist, Brazil's largest department store marketplace.**
+> An interactive e-commerce analytics dashboard built with **Python, Pandas, Plotly, and Streamlit**, analyzing 99K+ orders from the Olist Brazilian E-Commerce Public Dataset.
 
----
+## 🚀 Live Demo
 
-## 🚀 Live Demo & Project Highlights
-
-- **Live Streamlit App:** *(Add your deployed Streamlit Cloud URL here after deploying!)*
-- **Data Source:** [Olist Brazilian E-Commerce Public Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (100K orders, 2016–2018).
-- **Core Architecture:** Star-schema dimensional modeling with pre-joined Parquet storage for sub-second load times and zero memory bottlenecks.
+**Streamlit App:** Add your deployed Streamlit URL here
 
 ---
 
-## 📊 Executive KPI Verification & Benchmark Figures
+## 📌 Project Overview
 
-Every metric in this dashboard is verified and mathematically exact against grain-level data modeling standards:
+This project analyzes the **Olist Brazilian E-Commerce Public Dataset** to understand marketplace performance across:
 
-| Key Performance Indicator | Verified Value | Business Definition / Context |
-|---|---|---|
-| **Gross Merchandise Value (GMV)** | **R$ 15,843,553** | Total transaction volume (Product Price + Freight Value) |
-| **Product Net Revenue** | **R$ 13,591,644** | Core product sales volume (85.8% of GMV) |
-| **Freight Cost** | **R$ 2,251,910** | Total shipping fees paid by buyers (14.2% of GMV) |
-| **Total Orders** | **99,441** | Distinct customer orders across marketplace |
-| **Order Lines (Items)** | **112,650** | Item units sold across 32.9K distinct products |
-| **Unique Customers** | **96,096** | Distinct individual buyers nationwide |
-| **Active Sellers** | **3,095** | Merchants with at least one verified sale |
-| **Average Order Value (AOV)** | **R$ 160.58** | Mean financial spend per order (incl. freight) |
-| **Items per Order** | **1.13 items** | Basket size / cross-sell density |
-| **Delivered Orders** | **96,478** | Successfully fulfilled customer deliveries |
-| **On-Time Delivery Rate** | **91.89%** | Deliveries fulfilled on or before promise date |
-| **Late Deliveries Count** | **7,827** | Orders breaching SLA (8.1% national late rate) |
-| **Average Lead Time** | **12.1 Days** | Mean days from purchase to customer door (Median: 10d) |
-| **CSAT Positive Share (4–5★)** | **77.1%** | Customer satisfaction rate (Overall Mean: 4.09★) |
-| **Severe Dissatisfaction (1★)** | **11.5%** | 1-Star review share across all orders |
-| **Repeat Customer Rate** | **3.12%** | Buyers with >1 lifetime purchase |
-| **GMV YoY Growth (Jan–Aug 17 vs 18)** | **+139.4%** | Marketplace annual transaction velocity |
-| **Top 3 States GMV Share** | **62.5%** | Regional dominance: SP (37.4%), RJ (13.4%), MG (11.7%) |
-| **Category 80/20 Concentration** | **18 of 72 Categories** | 25% of categories generate 80% of total revenue |
-| **Seller 80/20 Concentration** | **Top 20% Sellers** | Top quintile of merchants generate 82.1% of GMV |
-| **Credit Card Value Share** | **78.3%** | Preferred consumer payment mechanism |
-| **Installment Financing Rate** | **51.5%** | Orders financed via split installments (1x to 24x) |
+* Revenue and GMV
+* Customers
+* Products and categories
+* Sellers
+* Payments
+* Delivery performance
+* Customer reviews
+* Geographic performance
+
+The project combines **data cleaning, ETL, exploratory analysis, business analytics, statistical analysis, and interactive dashboard development** into a single application.
+
+The dashboard is designed to answer practical business questions rather than simply display charts.
 
 ---
 
-## 💡 Key Analytical Findings & Business Takeaways
+## 📊 Key Metrics
 
-1. **The Extreme Penalty of Logistics Delays on CSAT:**
-   - **On-time deliveries** earn an average review rating of **4.29★** with only **6.6% 1-star reviews**.
-   - **Late deliveries** plummet to **2.57★** (a **-1.72 star penalty**) with an astounding **46.2% 1-star reviews** — a 7x increase in customer churn risk.
-2. **Category Pareto Efficiency:**
-   - Out of 72 product categories, just **18 categories drive 80% of total GMV**. The top categories are *Health & Beauty*, *Watches & Gifts*, *Bed / Bath / Table*, and *Sports & Leisure*.
-3. **Geographic Concentration & Freight Disparity:**
-   - The Southeast corridor (**SP, RJ, MG**) accounts for **62.5% of total GMV** with low average lead times (~8–10 days).
-   - Remote northern and northeastern states (e.g. **RR, AP, AM, AL**) experience higher late delivery rates (>15–20%) and double the freight-to-price ratio.
-4. **Consumer Financing as a Conversion Driver:**
-   - Over **51.5% of all orders** are paid in installments (averaging 3–6 installments), with credit card representing **78.3% of total payment volume**.
-
----
-
-## 📱 Dashboard Navigation & Features
-
-The dashboard includes 6 dedicated views designed following corporate consulting reporting standards:
-
-- 🏛️ **Executive Overview:** High-level KPIs, monthly GMV growth with 3-month rolling averages, state contribution rankings, and sentiment distribution.
-- 💼 **Revenue & Product Economics:** Category Pareto curve (80/20 cutoff), payment instrument mix, category economics scatter matrix (AOV vs CSAT vs Freight Ratio), and seller concentration curves.
-- 🚚 **Delivery SLA & Experience:** On-time delivery benchmarks, state-level late rate analysis, fulfillment lifecycle funnel, lead time histograms, and direct rating impact visualizations.
-- 🗺️ **Customer & Geospatial Analytics:** Interactive Brazil geographic bubble map, purchasing habits heatmap (Day of Week × Hour of Day), customer cohort dynamics, and state-by-state executive scorecards.
-- 🔍 **Interactive Data Explorer:** Multi-criteria search (Order ID, City, Category), dynamic data table slicing, and one-click CSV export.
-- 📚 **KPI Glossary & Technical Methodology:** Comprehensive formula definitions, star-schema modeling architecture, and data cleaning decisions.
+| Metric                     |         Value |
+| -------------------------- | ------------: |
+| Total GMV                  | **R$ 15.84M** |
+| Product Revenue            | **R$ 13.59M** |
+| Freight Revenue            |  **R$ 2.25M** |
+| Total Orders               |    **99,441** |
+| Order Items                |   **112,650** |
+| Unique Customers           |    **96,096** |
+| Active Sellers             |     **3,095** |
+| Average Order Value        | **R$ 160.58** |
+| Average Items / Order      |      **1.13** |
+| Delivered Orders           |    **96,478** |
+| On-Time Delivery Rate      |    **91.89%** |
+| Average Delivery Lead Time | **12.1 days** |
+| Average Review Score       |  **4.09 / 5** |
 
 ---
 
-## 🛠️ Project Structure
+## 🔍 Key Business Findings
 
+### 🚚 Delivery Performance Matters
+
+Delivery performance has a strong relationship with customer satisfaction.
+
+* On-time orders: **4.29★ average rating**
+* Late orders: **2.57★ average rating**
+* Difference: **-1.72 stars**
+* 1-star reviews:
+
+  * On-time: **6.6%**
+  * Late: **46.2%**
+
+This indicates that late delivery is strongly associated with poor customer reviews.
+
+> Note: This is an observational relationship, so it should not be interpreted as proof that delivery delays alone cause lower ratings.
+
+### 📈 Category Concentration
+
+The analysis shows a strong concentration of revenue across product categories.
+
+* **18 of 72 categories** account for approximately **80% of revenue**.
+* This highlights the importance of focusing inventory, marketing, and seller strategy on high-performing categories.
+
+### 🌎 Geographic Concentration
+
+The Southeast region represents a large share of marketplace activity.
+
+The top three states:
+
+* São Paulo
+* Rio de Janeiro
+* Minas Gerais
+
+together contribute approximately **62.5% of GMV**.
+
+### 💳 Payment Behavior
+
+Credit cards are the dominant payment method, representing approximately **78.3% of payment value**.
+
+Installment payments also represent a significant portion of transactions, highlighting the importance of financing in the Brazilian e-commerce market.
+
+---
+
+# 📱 Dashboard Features
+
+The Streamlit application contains multiple analytical sections.
+
+### 🏠 Executive Overview
+
+Provides a high-level view of marketplace performance:
+
+* GMV
+* Revenue
+* Orders
+* Customers
+* Monthly revenue trends
+* State performance
+* Customer review distribution
+
+### 💰 Revenue & Product Analytics
+
+Analyzes:
+
+* Revenue by category
+* Revenue by sub-category
+* Category Pareto analysis
+* Payment method distribution
+* Average order value
+* Freight-to-product price ratio
+* Seller concentration
+
+### 🚚 Delivery & Customer Experience
+
+Analyzes:
+
+* On-time vs late deliveries
+* Delivery lead time
+* Late delivery rate
+* Delivery performance by state
+* Review score vs delivery performance
+* Customer satisfaction
+
+### 🗺️ Customer & Geographic Analytics
+
+Includes:
+
+* State-level performance
+* Geographic sales analysis
+* Customer purchasing patterns
+* Order activity by day and hour
+* Customer segments and cohorts
+
+### 🔎 Interactive Data Explorer
+
+Allows users to explore individual records using filters such as:
+
+* Order ID
+* City
+* Product category
+* State
+
+The filtered data can also be exported for further analysis.
+
+### 📚 KPI Glossary & Methodology
+
+Documents:
+
+* KPI definitions
+* Business formulas
+* Data transformations
+* Data modeling decisions
+* Analytical methodology
+
+---
+
+# 🛠️ Tech Stack
+
+| Technology     | Purpose                                |
+| -------------- | -------------------------------------- |
+| **Python**     | Data processing and analytics          |
+| **Pandas**     | Data manipulation and transformation   |
+| **PyArrow**    | Parquet data processing                |
+| **Plotly**     | Interactive visualizations             |
+| **Streamlit**  | Dashboard application                  |
+| **Parquet**    | Optimized analytical storage           |
+| **Git/GitHub** | Version control and project management |
+
+---
+
+# 🏗️ Data Pipeline
+
+The project follows an ETL-style workflow:
+
+```text
+Olist Raw CSV Files
+        │
+        ▼
+   Data Cleaning
+        │
+        ▼
+   Data Transformation
+        │
+        ▼
+   Data Modeling
+        │
+        ▼
+   Parquet Files
+        │
+        ▼
+ Streamlit Dashboard
+        │
+        ▼
+ Business Insights
 ```
-olist_ecommerce_analytics_dashboard/
+
+The `prepare_data.py` script is responsible for transforming the raw Olist datasets into optimized analytical datasets used by the dashboard.
+
+---
+
+# 📁 Project Structure
+
+```text
+olist-ecommerce-analytics-dashboard/
+│
 ├── .streamlit/
-│   └── config.toml          # Custom modern UI styling & theme configuration
+│   └── config.toml
+│
 ├── data/
-│   ├── olist_merged.parquet # Pre-joined item-grain fact dataset (18MB)
-│   └── olist_orders.parquet # Pre-aggregated order-grain dimensional dataset (15MB)
-├── app.py                   # Main Streamlit interactive dashboard application
-├── prepare_data.py          # ETL data pipeline (transforms 9 raw CSVs into Parquet)
-├── requirements.txt         # Production dependencies for cloud deployment
-├── .gitignore               # Git rules excluding caches and large temporary files
-└── README.md                # Comprehensive documentation & portfolio guide
+│   ├── olist_merged.parquet
+│   └── olist_orders.parquet
+│
+├── app.py
+├── prepare_data.py
+├── requirements.txt
+├── .gitignore
+└── README.md
 ```
+
+### File Description
+
+**`app.py`**
+Main Streamlit application containing the dashboard and interactive visualizations.
+
+**`prepare_data.py`**
+ETL pipeline used to clean, transform, join, and prepare the Olist datasets.
+
+**`data/olist_merged.parquet`**
+Item-level analytical dataset used for product, revenue, seller, and category analysis.
+
+**`data/olist_orders.parquet`**
+Order-level dataset used for customer, delivery, review, and order-level analysis.
+
+**`requirements.txt`**
+Python dependencies required to run the application.
+
+**`.streamlit/config.toml`**
+Streamlit application configuration and theme settings.
 
 ---
 
-## 💻 Local Installation & Setup
+# 💻 Run Locally
+
+## 1. Clone the repository
 
 ```bash
-# 1. Clone this repository
-git clone https://github.com/your-username/olist-ecommerce-analytics-dashboard.git
+git clone https://github.com/YOUR_USERNAME/olist-ecommerce-analytics-dashboard.git
 cd olist-ecommerce-analytics-dashboard
+```
 
-# 2. (Optional) Create and activate a virtual environment
+## 2. Create a virtual environment
+
+```bash
 python -m venv venv
-# On Windows:
+```
+
+### Windows
+
+```bash
 venv\Scripts\activate
-# On Mac/Linux:
+```
+
+### macOS / Linux
+
+```bash
 source venv/bin/activate
+```
 
-# 3. Install required dependencies
+## 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-# 4. Launch the Streamlit dashboard
+## 4. Run the dashboard
+
+```bash
 streamlit run app.py
 ```
 
----
-
-## ☁️ Free 1-Click Deployment to Streamlit Community Cloud
-
-You can deploy this application publicly in under 2 minutes:
-
-1. **Initialize Git & Push to GitHub:**
-   ```bash
-   git init
-   git add .
-   git commit -m "feat: initial commit of Olist E-Commerce Analytics Suite"
-   git branch -M main
-   git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPO_NAME>.git
-   git push -u origin main
-   ```
-2. **Deploy on Streamlit Cloud:**
-   - Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
-   - Click **"Create app"** / **"New app"**.
-   - Select your repository and set the Main file path to: `app.py`.
-   - Click **"Deploy!"**.
-3. **Add the URL to your Resume & LinkedIn:**
-   - You will get a permanent URL (e.g., `https://olist-analytics.streamlit.app`) to showcase in your portfolio!
+The application will open in your browser.
 
 ---
 
-## 📄 Resume-Ready Project Descriptions (Copy & Paste)
+# ☁️ Deploy on Streamlit Community Cloud
 
-### **Bullet Points for Resume / LinkedIn:**
-- *Architected an end-to-end e-commerce analytics suite using Streamlit, Python (Pandas/PyArrow), and Plotly, modeling 100K+ transactions and R$ 15.8M GMV across 72 product categories.*
-- *Identified critical logistics bottlenecks through SLA tracking (91.9% on-time rate) and proved statistically that delivery delays inflict a 1.72-star rating penalty, escalating 1-star reviews by 7x (46.2% vs 6.6%).*
-- *Conducted Pareto analysis revealing that top 25% of categories drive 80% of marketplace revenue, and established that top 20% of sellers generate 82.1% of commercial volume.*
-- *Optimized query response times by 85% by engineering a star-schema Parquet storage pipeline with grain-level deduplication and pre-aggregated dimensional views.*
+1. Push the project to GitHub.
+2. Open Streamlit Community Cloud.
+3. Connect your GitHub account.
+4. Select this repository.
+5. Set the main file to:
+
+```text
+app.py
+```
+
+6. Deploy the application.
+
+After deployment, add your Streamlit URL to the **Live Demo** section at the top of this README.
 
 ---
 
+# 📚 Dataset
+
+This project uses the **Olist Brazilian E-Commerce Public Dataset**.
+
+The dataset contains information about:
+
+* Orders
+* Customers
+* Sellers
+* Products
+* Payments
+* Reviews
+* Order items
+* Geolocation
+
+The original dataset covers Brazilian e-commerce transactions from approximately **2016–2018**.
+
+Dataset source:
+
+[Olist Brazilian E-Commerce Public Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+
+---
+
+# 📈 Analytical Methods
+
+The project uses several data analytics techniques:
+
+### Exploratory Data Analysis
+
+* Descriptive statistics
+* Distribution analysis
+* Correlation analysis
+* Outlier analysis
+* Time-series analysis
+* Categorical analysis
+
+### Business Analytics
+
+* Revenue analysis
+* Customer analysis
+* Product analysis
+* Seller analysis
+* Geographic analysis
+* Delivery analysis
+* Payment analysis
+
+### Statistical Analysis
+
+The project also evaluates the relationship between delivery performance and customer review scores using statistical testing.
+
+The results are interpreted as **observational evidence**, not as a randomized experiment.
+
+---
+
+# 🎯 Business Questions
+
+The dashboard was designed around questions such as:
+
+* What is the total GMV generated by the marketplace?
+* Which categories generate the most revenue?
+* Which sellers contribute the most GMV?
+* Which states generate the most sales?
+* How does delivery performance vary by region?
+* Does late delivery correspond with lower review scores?
+* Which payment methods are most frequently used?
+* How concentrated is revenue across categories and sellers?
+* How does marketplace revenue change over time?
+* Which customer segments contribute the most value?
+---
+
+# 👤 Author
+
+**Vinay Chauhan**
+
+Data Analyst | Python | SQL | Power BI | Excel | Data Analytics
+
+---
+
+## ⭐ If you found this project useful
+
+Feel free to explore the repository and the live dashboard.
+https://olist-app-dashboard-rvyuanhnkffmbavx3mypct.streamlit.app/
