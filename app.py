@@ -1,8 +1,8 @@
 ﻿"""
 =============================================================================
-E-Commerce Business Performance Dashboard (Olist Brazilian Marketplace)
+E-Commerce Executive Analytics Dashboard | Olist Brazilian Marketplace
 Author: Vinay Chauhan (Data Analyst Portfolio Project)
-Tools: Python, Streamlit, Pandas, Plotly Express
+Tools: Python, Streamlit, Pandas, Plotly Express & Graph Objects
 =============================================================================
 """
 
@@ -12,14 +12,119 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 # ---------------------------------------------------------------------------
-# 1. PAGE CONFIGURATION
+# 1. PAGE CONFIGURATION & MODERN THEME
 # ---------------------------------------------------------------------------
 st.set_page_config(
-    page_title="E-Commerce Analytics Dashboard | Olist",
-    page_icon="📊",
+    page_title="Olist E-Commerce Analytics | Executive Suite",
+    page_icon="📦",
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Custom CSS for a clean, pro-tier UI
+st.markdown("""
+<style>
+    /* Global Typography & Font */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    
+    .block-container {
+        padding-top: 1.5rem;
+        padding-bottom: 3rem;
+        max-width: 1400px;
+    }
+    
+    /* Top Pro Header Banner */
+    .hero-banner {
+        background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+        color: #FFFFFF;
+        border-radius: 14px;
+        padding: 24px 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .hero-title {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        margin: 0;
+        color: #F8FAFC;
+    }
+    .hero-subtitle {
+        font-size: 13px;
+        color: #94A3B8;
+        margin-top: 6px;
+        margin-bottom: 12px;
+    }
+    .hero-tag {
+        display: inline-block;
+        background: rgba(59, 130, 246, 0.15);
+        color: #60A5FA;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-right: 6px;
+    }
+
+    /* Metric Cards */
+    div[data-testid="stMetric"] {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 16px 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s ease-in-out;
+    }
+    div[data-testid="stMetric"]:hover {
+        border-color: #CBD5E1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        transform: translateY(-2px);
+    }
+    div[data-testid="stMetricLabel"] {
+        font-size: 13px;
+        font-weight: 500;
+        color: #64748B;
+    }
+    div[data-testid="stMetricValue"] {
+        font-size: 24px;
+        font-weight: 700;
+        color: #0F172A;
+        letter-spacing: -0.5px;
+    }
+
+    /* Custom Insight Callout Cards */
+    .pro-insight {
+        background: #F8FAFC;
+        border-left: 4px solid #3B82F6;
+        border-radius: 8px;
+        padding: 14px 18px;
+        margin: 16px 0;
+        font-size: 13.5px;
+        color: #334155;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+    .pro-insight strong {
+        color: #1E293B;
+    }
+
+    /* Modern Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 # 2. DATA LOADING & CACHING
@@ -27,8 +132,8 @@ st.set_page_config(
 @st.cache_data
 def load_data():
     """
-    Loads and prepares the cleaned Olist marketplace dataset.
-    Uses st.cache_data to prevent reloading the dataset on every user interaction.
+    Loads pre-aggregated and cleaned Olist marketplace dataset.
+    Uses st.cache_data for instant caching and performance.
     """
     df = pd.read_parquet("data/olist_merged.parquet")
     df["order_purchase_timestamp"] = pd.to_datetime(df["order_purchase_timestamp"])
@@ -37,33 +142,38 @@ def load_data():
 df = load_data()
 
 # ---------------------------------------------------------------------------
-# 3. SIDEBAR FILTERS
+# 3. SIDEBAR FILTERS (POLISHED & INTUITIVE)
 # ---------------------------------------------------------------------------
-st.sidebar.header("🔍 Filter Dashboard")
+with st.sidebar:
+    st.markdown("### 🎛️ **Dashboard Controls**")
+    st.caption("Filter data across time and geography")
+    
+    # Year Filter
+    available_years = sorted(df["order_year"].dropna().unique().tolist())
+    selected_years = st.multiselect(
+        "📅 **Order Year**",
+        options=available_years,
+        default=available_years
+    )
 
-# Year Filter
-available_years = sorted(df["order_year"].dropna().unique().tolist())
-selected_years = st.sidebar.multiselect(
-    "Select Year(s):",
-    options=available_years,
-    default=available_years
-)
+    # State Filter
+    all_states = sorted(df["customer_state"].dropna().unique().tolist())
+    selected_states = st.multiselect(
+        "📍 **Customer State**",
+        options=all_states,
+        default=[]
+    )
 
-# State Filter
-all_states = sorted(df["customer_state"].dropna().unique().tolist())
-selected_states = st.sidebar.multiselect(
-    "Select Customer State(s):",
-    options=all_states,
-    default=[]
-)
-
-# Order Status Filter
-all_status = sorted(df["order_status"].dropna().unique().tolist())
-selected_status = st.sidebar.multiselect(
-    "Select Order Status:",
-    options=all_status,
-    default=["delivered"]
-)
+    # Order Status Filter
+    all_status = sorted(df["order_status"].dropna().unique().tolist())
+    selected_status = st.multiselect(
+        "📦 **Order Status**",
+        options=all_status,
+        default=["delivered"]
+    )
+    
+    st.divider()
+    st.caption("💡 **Tip:** Clear state filter to view national totals.")
 
 # Apply filters
 filtered_df = df.copy()
@@ -74,9 +184,9 @@ if selected_states:
 if selected_status:
     filtered_df = filtered_df[filtered_df["order_status"].isin(selected_status)]
 
-# Handling empty filter state
+# Handling empty selection
 if filtered_df.empty:
-    st.warning("⚠️ No data available for the selected filters. Please adjust your selections.")
+    st.warning("⚠️ No records match the selected filters. Please expand your selection.")
     st.stop()
 
 # ---------------------------------------------------------------------------
@@ -87,7 +197,7 @@ total_orders = filtered_df["order_id"].nunique()
 avg_order_value = total_revenue / total_orders if total_orders > 0 else 0
 avg_review_score = filtered_df["review_score"].mean()
 
-# On-time delivery percentage
+# On-time delivery calculation
 delivered_orders = filtered_df.dropna(subset=["is_late"])
 if len(delivered_orders) > 0:
     late_rate = delivered_orders["is_late"].astype(bool).mean()
@@ -98,40 +208,43 @@ else:
     avg_delivery_days = 0
 
 # ---------------------------------------------------------------------------
-# 5. DASHBOARD HEADER & KPI CARDS
+# 5. PRO EXECUTIVE HEADER & KPI CARDS
 # ---------------------------------------------------------------------------
-st.title("📊 E-Commerce Business Performance Dashboard")
-st.markdown(
-    "Interactive analytics dashboard evaluating **Sales Performance**, **Logistics Efficiency**, "
-    "and **Customer Feedback** for ~100,000 orders on the Olist Marketplace (2016–2018)."
-)
-st.divider()
+st.markdown("""
+<div class="hero-banner">
+    <div class="hero-title">📦 Olist E-Commerce Performance Analytics</div>
+    <div class="hero-subtitle">Executive Intelligence Suite · Analyzing 100,000+ Orders & Marketplace Dynamics</div>
+    <span class="hero-tag">🇧🇷 Brazilian Marketplace</span>
+    <span class="hero-tag">📊 2016–2018 Dataset</span>
+    <span class="hero-tag">⚡ Live Parquet Engine</span>
+</div>
+""", unsafe_allow_html=True)
 
-# KPI Metric Row
-kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
+# 5 Sleek Metric Cards
+k1, k2, k3, k4, k5 = st.columns(5)
 
-kpi1.metric(
-    label="Total Revenue",
-    value=f"R$ {total_revenue:,.0f}",
+k1.metric(
+    label="Gross Revenue",
+    value=f"R$ {total_revenue/1_000_000:.2f}M",
     help="Total value of items ordered including freight"
 )
-kpi2.metric(
+k2.metric(
     label="Total Orders",
     value=f"{total_orders:,}",
-    help="Count of unique orders placed"
+    help="Total distinct orders placed"
 )
-kpi3.metric(
+k3.metric(
     label="Avg Order Value (AOV)",
     value=f"R$ {avg_order_value:.2f}",
-    help="Average revenue generated per order"
+    help="Average spend per order"
 )
-kpi4.metric(
-    label="On-Time Delivery Rate",
+k4.metric(
+    label="On-Time Delivery",
     value=f"{on_time_rate:.1f}%",
-    help="Percentage of orders delivered on or before the estimated date"
+    help="Orders delivered on or before the estimated promise date"
 )
-kpi5.metric(
-    label="Avg Customer Rating",
+k5.metric(
+    label="Customer Rating (CSAT)",
     value=f"⭐ {avg_review_score:.2f} / 5.0",
     help="Average review rating from 1 to 5 stars"
 )
@@ -139,22 +252,26 @@ kpi5.metric(
 st.write("")
 
 # ---------------------------------------------------------------------------
-# 6. TABBED ANALYTICS SECTIONS
+# 6. TABBED ANALYTICS SECTIONS (PRO DATA VISUALIZATIONS)
 # ---------------------------------------------------------------------------
 tab_sales, tab_ops, tab_cust = st.tabs([
-    "📈 Sales & Revenue",
-    "🚚 Logistics & Operations",
-    "👥 Customer & Payments"
+    "📈  Sales & Revenue Performance",
+    "🚚  Logistics & Fulfillment",
+    "💳  Customer & Payment Insights"
 ])
+
+# Color Palettes
+NAVY_PALETTE = ["#1E3A8A", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD"]
+ACCENT_BLUE = "#2563EB"
 
 # ---------------------------------------------------------------------------
 # TAB 1: SALES & REVENUE PERFORMANCE
 # ---------------------------------------------------------------------------
 with tab_sales:
-    col_left, col_right = st.columns([6, 4])
+    col_trend, col_cat = st.columns([6, 4])
 
-    with col_left:
-        st.subheader("Monthly Revenue Trend")
+    with col_trend:
+        st.markdown("##### 📈 **Monthly Revenue Growth (GMV)**")
         monthly_sales = (
             filtered_df[filtered_df["is_complete_month"] == True]
             .groupby("order_year_month")["item_total"]
@@ -167,15 +284,24 @@ with tab_sales:
             x="order_year_month",
             y="item_total",
             markers=True,
-            labels={"order_year_month": "Year-Month", "item_total": "Revenue (R$)"},
-            title="Monthly Gross Merchandise Value (GMV)"
+            labels={"order_year_month": "Month", "item_total": "Gross Revenue (R$)"}
         )
-        fig_trend.update_traces(line_color="#1E88E5", line_width=3)
-        fig_trend.update_layout(xaxis_tickangle=-45, height=380, margin=dict(l=20, r=20, t=40, b=20))
+        fig_trend.update_traces(
+            line=dict(color="#2563EB", width=3.5),
+            marker=dict(size=7, color="#1E3A8A")
+        )
+        fig_trend.update_layout(
+            template="plotly_white",
+            height=370,
+            margin=dict(l=10, r=10, t=20, b=10),
+            hovermode="x unified",
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9", tickprefix="R$ "),
+            xaxis=dict(showgrid=False, tickangle=-45)
+        )
         st.plotly_chart(fig_trend, use_container_width=True)
 
-    with col_right:
-        st.subheader("Top 10 Product Categories")
+    with col_cat:
+        st.markdown("##### 🏆 **Top 10 Product Categories by Revenue**")
         top_cats = (
             filtered_df.groupby("category_english")["item_total"]
             .sum()
@@ -190,26 +316,37 @@ with tab_sales:
             y="category_english",
             orientation="h",
             labels={"item_total": "Revenue (R$)", "category_english": "Category"},
-            title="Top 10 Categories by Revenue",
             text_auto=".2s"
         )
-        fig_cat.update_traces(marker_color="#3949AB")
-        fig_cat.update_layout(height=380, margin=dict(l=20, r=20, t=40, b=20))
+        fig_cat.update_traces(
+            marker_color="#1E3A8A",
+            textposition="outside"
+        )
+        fig_cat.update_layout(
+            template="plotly_white",
+            height=370,
+            margin=dict(l=10, r=10, t=20, b=10),
+            xaxis=dict(showgrid=True, gridcolor="#F1F5F9", tickprefix="R$ "),
+            yaxis=dict(showgrid=False)
+        )
         st.plotly_chart(fig_cat, use_container_width=True)
 
-    st.info(
-        "💡 **Analyst Finding:** Health & Beauty, Watches & Gifts, and Bed & Bath drive the highest marketplace revenue. "
-        "November 2017 recorded a major revenue spike attributed to Black Friday promotions."
-    )
+    st.markdown("""
+    <div class="pro-insight">
+        💡 <strong>Executive Insight:</strong> High-ticket categories like <strong>Health & Beauty</strong>, 
+        <strong>Watches & Gifts</strong>, and <strong>Bed & Bath</strong> dominate marketplace GMV. 
+        A significant inflection point occurred in <strong>November 2017</strong> with record Black Friday sales volume.
+    </div>
+    """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
-# TAB 2: LOGISTICS & OPERATIONS PERFORMANCE
+# TAB 2: LOGISTICS & FULFILLMENT
 # ---------------------------------------------------------------------------
 with tab_ops:
-    col_ops1, col_ops2 = st.columns(2)
+    col_deliv, col_geo = st.columns(2)
 
-    with col_ops1:
-        st.subheader("Delivery Speed vs Customer Rating")
+    with col_deliv:
+        st.markdown("##### ⏱️ **Delivery Speed vs Customer Satisfaction**")
         delivered_subset = filtered_df.dropna(subset=["delivery_days", "review_score"]).copy()
         delivered_subset["delivery_bucket"] = pd.cut(
             delivered_subset["delivery_days"],
@@ -228,15 +365,23 @@ with tab_ops:
             y="review_score",
             color="review_score",
             color_continuous_scale="Blues",
-            labels={"delivery_bucket": "Delivery Timeframe", "review_score": "Avg Review Score"},
-            title="Customer Satisfaction by Delivery Speed",
-            range_y=[1, 5]
+            labels={"delivery_bucket": "Delivery Timeframe", "review_score": "Avg Review Rating"},
+            range_y=[1, 5],
+            text_auto=".2f"
         )
-        fig_deliv.update_layout(height=380, margin=dict(l=20, r=20, t=40, b=20))
+        fig_deliv.update_traces(textposition="outside")
+        fig_deliv.update_layout(
+            template="plotly_white",
+            height=370,
+            margin=dict(l=10, r=10, t=20, b=10),
+            coloraxis_showscale=False,
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9"),
+            xaxis=dict(showgrid=False)
+        )
         st.plotly_chart(fig_deliv, use_container_width=True)
 
-    with col_ops2:
-        st.subheader("Top 10 States by Order Volume")
+    with col_geo:
+        st.markdown("##### 📍 **Top 10 States by Order Volume**")
         state_orders = (
             filtered_df.groupby("customer_state")["order_id"]
             .nunique()
@@ -246,31 +391,42 @@ with tab_ops:
             .head(10)
         )
 
-        fig_states = px.bar(
+        fig_geo = px.bar(
             state_orders,
             x="customer_state",
             y="total_orders",
-            labels={"customer_state": "State", "total_orders": "Orders"},
-            title="Order Volume by State (Top 10)",
+            labels={"customer_state": "State Code", "total_orders": "Orders"},
             color="total_orders",
-            color_continuous_scale="Teal"
+            color_continuous_scale="teal",
+            text_auto=".2s"
         )
-        fig_states.update_layout(height=380, margin=dict(l=20, r=20, t=40, b=20))
-        st.plotly_chart(fig_states, use_container_width=True)
+        fig_geo.update_traces(textposition="outside")
+        fig_geo.update_layout(
+            template="plotly_white",
+            height=370,
+            margin=dict(l=10, r=10, t=20, b=10),
+            coloraxis_showscale=False,
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9"),
+            xaxis=dict(showgrid=False)
+        )
+        st.plotly_chart(fig_geo, use_container_width=True)
 
-    st.warning(
-        f"🚚 **Operations Insight:** Orders delivered within 10 days maintain high customer satisfaction (~4.3/5). "
-        f"However, orders taking 20+ days see rating drops below 3.0. Current average delivery time is **{avg_delivery_days:.1f} days**."
-    )
+    st.markdown(f"""
+    <div class="pro-insight">
+        🚚 <strong>Logistics Takeaway:</strong> Orders delivered under 10 days boast an average rating of <strong>4.3 / 5.0</strong>. 
+        When transit exceeds 20 days, satisfaction plummets below <strong>2.8 / 5.0</strong>. 
+        Overall marketplace average delivery duration is <strong>{avg_delivery_days:.1f} days</strong>.
+    </div>
+    """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 # TAB 3: CUSTOMER & PAYMENT INSIGHTS
 # ---------------------------------------------------------------------------
 with tab_cust:
-    col_cust1, col_cust2 = st.columns(2)
+    col_pay, col_rating = st.columns(2)
 
-    with col_cust1:
-        st.subheader("Payment Method Breakdown")
+    with col_pay:
+        st.markdown("##### 💳 **Revenue Share by Payment Method**")
         payment_dist = (
             filtered_df.groupby("primary_payment_type")["item_total"]
             .sum()
@@ -283,45 +439,64 @@ with tab_cust:
             payment_dist,
             names="payment_type",
             values="revenue",
-            title="Revenue Share by Payment Method",
-            hole=0.4,
-            color_discrete_sequence=px.colors.qualitative.Safe
+            hole=0.55,
+            color_discrete_sequence=["#1E3A8A", "#2563EB", "#60A5FA", "#CBD5E1"]
         )
-        fig_pay.update_layout(height=380, margin=dict(l=20, r=20, t=40, b=20))
+        fig_pay.update_traces(
+            textposition="inside",
+            textinfo="percent+label",
+            marker=dict(line=dict(color="#FFFFFF", width=2))
+        )
+        fig_pay.update_layout(
+            template="plotly_white",
+            height=370,
+            margin=dict(l=10, r=10, t=20, b=10),
+            showlegend=False
+        )
         st.plotly_chart(fig_pay, use_container_width=True)
 
-    with col_cust2:
-        st.subheader("Customer Review Score Distribution")
+    with col_rating:
+        st.markdown("##### ⭐ **Customer Review Score Distribution**")
         review_counts = (
             filtered_df["review_score"]
             .value_counts()
             .reset_index()
-            .rename(columns={"review_score": "review_stars", "count": "total_reviews"})
-            .sort_values(by="review_stars")
+            .rename(columns={"review_score": "stars", "count": "total_reviews"})
+            .sort_values(by="stars")
         )
 
         fig_rev = px.bar(
             review_counts,
-            x="review_stars",
+            x="stars",
             y="total_reviews",
-            labels={"review_stars": "Review Stars (1 to 5)", "total_reviews": "Total Reviews"},
-            title="Distribution of Customer Ratings",
-            color="review_stars",
-            color_continuous_scale="Viridis"
+            labels={"stars": "Review Stars (1 to 5)", "total_reviews": "Reviews"},
+            color="stars",
+            color_continuous_scale="Blues",
+            text_auto=".2s"
         )
-        fig_rev.update_layout(height=380, margin=dict(l=20, r=20, t=40, b=20))
+        fig_rev.update_traces(textposition="outside")
+        fig_rev.update_layout(
+            template="plotly_white",
+            height=370,
+            margin=dict(l=10, r=10, t=20, b=10),
+            coloraxis_showscale=False,
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9"),
+            xaxis=dict(showgrid=False, tickmode="linear", tick0=1, dtick=1)
+        )
         st.plotly_chart(fig_rev, use_container_width=True)
 
-    st.success(
-        "💳 **Payment Insight:** Over 75% of marketplace revenue is processed through **Credit Card** installments, "
-        "highlighting the importance of seamless installment checkout options for Brazilian consumers."
-    )
+    st.markdown("""
+    <div class="pro-insight">
+        💳 <strong>Payment Insight:</strong> Over <strong>75% of marketplace transactions</strong> are completed using 
+        <strong>Credit Card</strong> installments, reflecting Brazilian consumer reliance on split-payment financing.
+    </div>
+    """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
-# 7. FOOTER / PROJECT SUMMARY
+# 7. FOOTER
 # ---------------------------------------------------------------------------
 st.divider()
 st.caption(
-    "📌 **Portfolio Project Details:** Built by Vinay Chauhan | Dataset: Brazilian E-Commerce public dataset by Olist on Kaggle | "
-    "Tech Stack: Python (Pandas, Plotly), Streamlit Cloud, Parquet storage."
+    "📌 **Portfolio Project:** Designed & Developed by Vinay Chauhan | "
+    "Tech Stack: Python (Pandas, Plotly), Streamlit Community Cloud, Parquet Engine."
 )
