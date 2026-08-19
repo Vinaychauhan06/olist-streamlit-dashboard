@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches and environments
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+env/
+venv/
+ENV/
+
+# Large raw data files (the app uses data/olist_merged.parquet and data/olist_orders.parquet)
+raw_data/
+*.zip
+*.tar.gz
+*.csv
+
+# Keep parquet files in data/
+!data/*.parquet
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
